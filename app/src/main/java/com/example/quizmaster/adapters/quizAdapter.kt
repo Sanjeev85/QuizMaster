@@ -1,6 +1,7 @@
 package com.example.quizmaster.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizmaster.R
+import com.example.quizmaster.activities.questionsActivity
 import com.example.quizmaster.models.Quiz
 import com.example.quizmaster.utils.colorPicker
 import com.example.quizmaster.utils.iconPicker
@@ -26,7 +28,12 @@ class quizAdapter(val context: Context, val quizzes: ArrayList<Quiz>) :
     override fun onBindViewHolder(holder: QuizViewHolder, position: Int) {
         holder.textTitle.text = quizzes[position].title
         holder.iconview.setImageResource(iconPicker.getIcon())
-        holder.cardContainer.setCardBackgroundColor(Color.parseColor(colorPicker.getColor().toString()))
+        holder.cardContainer.setCardBackgroundColor(Color.parseColor(colorPicker.getColor()))
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, questionsActivity::class.java)
+            intent.putExtra("DATE", quizzes[position].title)
+            context.startActivity(intent)
+        }
     }
 
     override fun getItemCount(): Int {

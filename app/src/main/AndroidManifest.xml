@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.quizmaster">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,17 +12,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.QuizMaster">
         <activity
-            android:name=".activities.questionsActivity"
+            android:name=".activities.ProfileActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.ResultActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.questionsActivity"
+            android:exported="true" />
+        <activity
             android:name=".activities.LoginIntro"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".activities.signUp_activity"
             android:exported="false" />
@@ -29,7 +31,13 @@
             android:exported="false" />
         <activity
             android:name=".activities.MainActivity"
-            android:exported="true"></activity>
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

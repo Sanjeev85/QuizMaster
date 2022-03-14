@@ -1,5 +1,6 @@
 package com.example.quizmaster.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -10,8 +11,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.quizmaster.R
 import com.example.quizmaster.adapters.quizAdapter
 import com.example.quizmaster.models.Quiz
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
     lateinit var fireStore: FirebaseFirestore
@@ -23,24 +28,39 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-//        populateDummyData()
         setUpViews()
         setUpFireStore()
     }
 
 
-    private fun populateDummyData() {
-        quizList.add(Quiz("12-11-15", "Hello"))
-        quizList.add(Quiz("12-11-15", "Hello"))
-        quizList.add(Quiz("12-11-15", "Hello"))
-        quizList.add(Quiz("12-11-15", "Hello"))
-        quizList.add(Quiz("12-11-15", "Hello"))
-        quizList.add(Quiz("12-11-15", "Hello"))
-    }
-
     fun setUpViews() {
         setUpDrawer()
         setUpRecyclerView()
+        setUpDate()
+    }
+
+    private fun setUpDate() {
+        btndatePicker.setOnClickListener {
+            val datePicker = MaterialDatePicker.Builder.datePicker().build()
+            datePicker.show(supportFragmentManager, "DatePicker")
+            datePicker.addOnPositiveButtonClickListener {
+                Log.e("DatePicker", datePicker.headerText)
+                val dateFormatter = SimpleDateFormat("dd-mm-yyyy")
+                val date = dateFormatter.format(Date(it))
+                val intent = Intent(this, questionsActivity::class.java)
+                intent.putExtra("DATE", date)
+                startActivity(intent)
+            }
+            datePicker.addOnNegativeButtonClickListener {
+                Log.e("DatePicker", datePicker.headerText)
+
+            }
+            datePicker.addOnCancelListener {
+                Log.e("DatePicker", "Date Picker Cancelled")
+            }
+
+
+        }
     }
 
     private fun setUpFireStore() {
@@ -52,7 +72,7 @@ class MainActivity : AppCompatActivity() {
                 Log.e("ErrorFetching", "Error getting data")
                 return@addSnapshotListener
             }
-            Log.e("Done here"," What to do now ???")
+            Log.e("Done here", " What to do now ???")
             Log.e("Chinga", value.toObjects(Quiz::class.java).toString())
             quizList.clear()
             quizList.addAll(value.toObjects(Quiz::class.java))
@@ -73,6 +93,12 @@ class MainActivity : AppCompatActivity() {
         actionBarDrawerToggle =
             ActionBarDrawerToggle(this, main_drawer, R.string.app_name, R.string.app_name)
         actionBarDrawerToggle.syncState()
+        navigationView.setNavigationItemSelectedListener {
+            val intent = Intent(this, ProfileActivity::class.java)
+            startActivity(intent)
+            main_drawer.closeDrawers()
+            true
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
